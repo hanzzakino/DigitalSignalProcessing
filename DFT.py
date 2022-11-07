@@ -65,14 +65,14 @@ def getFourierSeries(dataSamples:NDArray, timeDuration:int, maxFrequency:int, re
 #         ff.write('\n'+str(d))
 
 
-# file = open('2 khz','r')
-# dataSet = np.array(file.readlines()).astype(float)
+file = open('2 khz','r')
+dataSet = np.array(file.readlines()).astype(float)
 
-# getFourierSeries(
-#     dataSamples = dataSet,
-#     timeDuration=6,
-#     maxFrequency=30,
-#     resFrequency=0.1,
-#     interpolationSampling=15000
-# )
+getFourierSeries(
+    dataSamples = dataSet,
+    timeDuration=6,
+    maxFrequency=30,
+    resFrequency=0.1,
+    interpolationSampling=15000
+)
 
