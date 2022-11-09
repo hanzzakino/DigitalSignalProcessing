@@ -115,21 +115,25 @@ def getDiscreteTimeFourierTransform(dataSamples:NDArray, timeDuration:int, maxFr
         X_ = np.linspace(x.min(), x.max(), interpolationSampling)
         # Obtain all y values using upsampled x-array 
         dataSamples = X_Y_Spline(X_)
+        # Set the new length of dataSamples
         N = len(dataSamples)
 
 
     print('Computing Fourier series...')
     
+    # Number of frequencies to iterate
+    # Obtained by dividing the maxFrequency to the resFrequency
     frequencyDivisions = math.floor(maxFrequency/resFrequency)
 
-    
+    # T(f) = Sum of f(t)*e^(-2i*pi*t*f)
+    # f(t) = sum of sine and cosine waves
+    # g(f,t) = sin(2*pi*f*t)
     fourier = np.array([
-        sum( (
-            math.e**(
-                -2j*math.pi*(freq*resFrequency)*(x*(timeDuration/N))
-            )
-            ) * dataSamples[x] for x in range(N)
+        sum( 
+            (math.e**(-2j*math.pi*(freq*resFrequency)*(x*(timeDuration/N)))) * dataSamples[x] 
+            for x in range(N)
         )
+        
         for freq in range(frequencyDivisions)
     ])
 
@@ -144,11 +148,11 @@ def getDiscreteTimeFourierTransform(dataSamples:NDArray, timeDuration:int, maxFr
         plot1.set_title("Time Domain")
 
 
-        plot2.plot(np.array([i*resFrequency for i in range(len(fourier))]),[i.real for i in fourier])
+        plot2.plot(np.array([i*resFrequency for i in range(len(fourier))]),[-i.imag for i in fourier])
         plot2.set_title("Frequency Domain - Sine waves")
 
 
-        plot3.plot(np.array([i*resFrequency for i in range(len(fourier))]),[-i.imag+i.real for i in fourier])
+        plot3.plot(np.array([i*resFrequency for i in range(len(fourier))]),[i.real-i.imag for i in fourier])
         plot3.set_title("Frequency Domain")
 
         plt.tight_layout()
@@ -163,9 +167,9 @@ def getDiscreteTimeFourierTransform(dataSamples:NDArray, timeDuration:int, maxFr
 def TESTING():
     timeStart = time.time()
     # TEST
-    w = lambda x : math.sin(2*math.pi*25*x) + math.sin(2*math.pi*7*x) + math.sin(2*math.pi*14*x)
-    w2 = lambda x : math.sin(2*math.pi*2*x) + math.cos(2*math.pi*7*x) + math.sin(2*math.pi*13*x) + math.cos(2*math.pi*18*x)
-    dataSet = np.array([w2(x/1000) for x in range(8000)])
+    w = lambda x : math.sin(2*math.pi*7*x) + math.sin(2*math.pi*14*x)
+    w2 = lambda x : math.sin(2*math.pi*2.4*x) + math.cos(2*math.pi*7.8*x) + math.sin(2*math.pi*13.3*x) + math.cos(2*math.pi*18.5*x)
+    dataSet = np.array([w2(x/2000) for x in range(12000)])
     # file = open('2 khz','w')
     # with file as ff:
     #     for d in dataSet:
@@ -174,7 +178,7 @@ def TESTING():
     # dataSet = np.array(file.readlines()).astype(float)
     getDiscreteTimeFourierTransform(
         dataSamples = dataSet,
-        timeDuration=8,
+        timeDuration=6,
         maxFrequency=24,
         resFrequency=0.1,
         interpolationSampling=5000,
