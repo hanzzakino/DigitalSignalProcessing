@@ -163,9 +163,8 @@ def getDiscreteTimeFourierTransform(dataSamples:NDArray, timeDuration:int, maxFr
 
 
 
-
 def TESTING():
-    timeStart = time.time()
+   
     # TEST
     w = lambda x : math.sin(2*math.pi*7*x) + math.sin(2*math.pi*14*x)
     w2 = lambda x : math.sin(2*math.pi*2.4*x) + math.cos(2*math.pi*7.8*x) + math.sin(2*math.pi*13.3*x) + math.cos(2*math.pi*18.5*x)
@@ -182,10 +181,11 @@ def TESTING():
         maxFrequency=24,
         resFrequency=0.1,
         interpolationSampling=5000,
-        show=True
+        show=False
     )
-    timeEnd = time.time()
-    print(timeEnd-timeStart)
+    
 
+timeStart = time.time()
 TESTING()
-
+timeEnd = time.time()
+print('Time finished: ',str(round(timeEnd-timeStart,3))+'s')
